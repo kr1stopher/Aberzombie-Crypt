@@ -17,6 +17,7 @@
   border-radius: 5px;
   box-shadow: 0 3px #999;
 }
+
 .showZombieButton:hover {
   padding: 17px 14px;
   font-size: 20px;
@@ -81,6 +82,34 @@
   transform: translateY(1px);
 }
 
+.feedOnKittyButton {
+  display: inline-block;
+  padding: 15px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 3px #999;
+}
+
+.feedOnKittyButton:hover {
+  padding: 17px 14px;
+  font-size: 20px;
+  border-radius: 15px;
+  background-color: #eb0b0b
+}
+
+.feedOnKittyButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(1px);
+}
+
 
 
 
@@ -108,7 +137,7 @@
   <button class="showZombieButton">Show Zombies</button>
   <button class="createzombieButton">Create Zombie</button>
   <button class="levelupButton">Level Up</button>
-
+  <button class="feedOnKittyButton">Feed on Kitty</button>
 
   <script>
 
@@ -117,11 +146,12 @@
     const showZombieButton = document.querySelector('.showZombieButton');
     const createzombieButton = document.querySelector('.createzombieButton');
     const levelupButton = document.querySelector('.levelupButton');
+    const feedOnKittyButton = document.querySelector('.feedOnKittyButton');
 
     function startApp() {
 	
       //ZombieOwnership contratc address
-      var cryptoZombiesAddress = "0xC08d276D3022F1E9E1e99eBAa6410fE4FcbEcB8f";
+      var cryptoZombiesAddress = "0x6105B3e5842dA8be79421BE2780B889F607aCE36";
 
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
@@ -286,6 +316,12 @@
 
     levelupButton.addEventListener('click', () => {
       getZombiesByOwner(userAccount)
+            .then(levelUp);
+
+    });
+
+    feedOnKittyButton.addEventListener('click', () => {
+      feedOnKitty(userAccount)
             .then(levelUp);
 
     });
