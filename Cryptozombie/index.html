@@ -2,29 +2,88 @@
 <html lang="en">
 
 <style type="text/css">
-/* #submit {
- background-color: #bbb;
- padding: .5em;
- -moz-border-radius: 5px;
- -webkit-border-radius: 5px;
- border-radius: 6px;
- color: #fff;
- font-family: 'Oswald';
- font-size: 20px;
- text-decoration: none;
- border: none;
-}
-#submit:hover {
- border: none;
- background: orange;
- box-shadow: 0px 0px 1px #777;
-} */
 
-/* #example1 {
-      background: url('lesson8.png');
-      background-repeat: no-repeat;
-      background-size: 3000px 1000px;
-    } */
+.showZombieButton {
+  display: inline-block;
+  padding: 15px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 3px #999;
+}
+.showZombieButton:hover {
+  padding: 17px 14px;
+  font-size: 20px;
+  border-radius: 15px;
+  background-color: #eb0b0b
+}
+.showZombieButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(1px);
+}
+
+.createzombieButton {
+  display: inline-block;
+  padding: 15px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 3px #999;
+}
+.createzombieButton:hover {
+  padding: 17px 14px;
+  font-size: 20px;
+  border-radius: 15px;
+  background-color: #eb0b0b
+}
+.createzombieButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(1px);
+}
+
+.levelupButton {
+  display: inline-block;
+  padding: 15px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 3px #999;
+}
+.levelupButton:hover {
+  padding: 17px 14px;
+  font-size: 20px;
+  border-radius: 15px;
+  background-color: #eb0b0b
+}
+.levelupButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(1px);
+}
+
+
+
+
 </style>
 
 <head>
@@ -38,8 +97,8 @@
 </head>
 
 <body style = "background: url(backgrounnd.jpeg);
-               /* background-size: 1400px 700px; */
-               background-size: 933.33px 466.66px;
+               background-size: 1400px 700px;
+               /* background-size: 933.33px 466.66px; */
                background-repeat: no-repeat;">
   <div id="txStatus"></div>
   <div id="zombies"></div>
@@ -49,7 +108,7 @@
   <button class="showZombieButton">Show Zombies</button>
   <button class="createzombieButton">Create Zombie</button>
   <button class="levelupButton">Level Up</button>
-  <button id="submit">Example Button</button>
+
 
   <script>
 
