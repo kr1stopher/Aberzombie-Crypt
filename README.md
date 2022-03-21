@@ -16,6 +16,7 @@ Improvements made to the starter code:
 
 Notes:
 - Feed on Kitty, Transfer Zombie functionalities are work in progress. 
+- Upon successful attack operation, the winner does not multiply. But wins and losses counters update correctly.
 
 
 
