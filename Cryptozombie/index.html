@@ -342,7 +342,7 @@ ul {
     }
 
     function getZombieDetails(id) {
-      $("#txStatus").text("Zombie Details: " + "ID: " + id);
+      $("#txStatus").text("Zombie Details: ");
       return cryptoZombies.methods.zombies(id).call()
     }
 
