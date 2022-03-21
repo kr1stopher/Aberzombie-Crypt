@@ -3,6 +3,32 @@
 
 <style type="text/css">
 
+.createZombieButton {
+  display: inline-block;
+  padding: 15px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 3px #999;
+}
+.createZombieButton:hover {
+  padding: 17px 14px;
+  font-size: 20px;
+  border-radius: 15px;
+  background-color: #eb0b0b
+}
+.createZombieButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(1px);
+}
+
 .showZombieButton {
   display: inline-block;
   padding: 15px 12px;
@@ -30,31 +56,7 @@
   transform: translateY(1px);
 }
 
-.createzombieButton {
-  display: inline-block;
-  padding: 15px 12px;
-  font-size: 12px;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  outline: none;
-  color: #fff;
-  background-color: #4CAF50;
-  border: none;
-  border-radius: 5px;
-  box-shadow: 0 3px #999;
-}
-.createzombieButton:hover {
-  padding: 17px 14px;
-  font-size: 20px;
-  border-radius: 15px;
-  background-color: #eb0b0b
-}
-.createzombieButton:active {
-  background-color: #3e8e41;
-  box-shadow: 0 2px #666;
-  transform: translateY(1px);
-}
+
 
 .levelupButton {
   display: inline-block;
@@ -138,6 +140,34 @@
   transform: translateY(1px);
 }
 
+.attackZombieButton {
+  display: inline-block;
+  padding: 15px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 3px #999;
+}
+
+.attackZombieButton:hover {
+  padding: 17px 14px;
+  font-size: 20px;
+  border-radius: 15px;
+  background-color: #eb0b0b
+}
+
+.attackZombieButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(1px);
+}
+
 ul li::before {
   content: "\2022";
   color: white;
@@ -175,10 +205,12 @@ ul {
   <div id="txStatus"></div>
   <div id="zombies"></div>
 
+  <label for="zombieName"></label>
+  <input type="text" id="zombieName" size="10">
 
-
+  <button class="createZombieButton">Create Zombie</button>
   <button class="showZombieButton">Show Zombies</button>
-  <button class="createzombieButton">Create Zombie</button>
+  <button class="attackZombieButton">Attack Zombie</button>
   <button class="levelupButton">Level Up</button>
   <button class="feedOnKittyButton">Feed on Kitty</button>
   <button class="transferZombieButton">Transfer Zombie</button>
@@ -190,8 +222,12 @@ ul {
 
     var cryptoZombies;
     var userAccount;
+
+    const names = [];
+
     const showZombieButton = document.querySelector('.showZombieButton');
-    const createzombieButton = document.querySelector('.createzombieButton');
+    const createZombieButton = document.querySelector('.createZombieButton');
+    const attackZombieButton = document.querySelector('.attackZombieButton');
     const levelupButton = document.querySelector('.levelupButton');
     const feedOnKittyButton = document.querySelector('.feedOnKittyButton');
     const transferZombieButton = document.querySelector('.transferZombieButton');
@@ -199,7 +235,7 @@ ul {
     function startApp() {
 	
       //ZombieOwnership contract address
-      var cryptoZombiesAddress = "0x81d66C14354e34d39A07E44368aFAbb36878eE8E";
+      var cryptoZombiesAddress = "0x82f583c5A7fE7260B6f0d83dc71525Fb58A50576";
 
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
@@ -225,14 +261,14 @@ ul {
     function displayZombies(ids) {
       $("#zombies").empty();
       for (id of ids) {
-
+        console.log("ID: ", id);
         getZombieDetails(id)
           .then(function (zombie) {
-            
+            console.log("names[id]: " + names[id]);
+            names[id] = zombie.name;
             $("#zombies").append(`<div class="zombie">
               <ul>
                 <li>Name: ${zombie.name}</li>
-                <li>Zombie Id: ${id}</li>
                 <li>DNA: ${zombie.dna}</li>
                 <li>Level: ${zombie.level}</li>
                 <li>Wins: ${zombie.winCount}</li>
@@ -254,8 +290,8 @@ ul {
         .send({ from: userAccount })
         .on("receipt", function (receipt) {
           $("#txStatus").text("Successfully created " + name + "!");
-
           getZombiesByOwner(userAccount).then(displayZombies);
+          names[id] = name;
         })
         .on("error", function (error) {
 
@@ -306,7 +342,7 @@ ul {
     }
 
     function getZombieDetails(id) {
-      $("#txStatus").text("Zombie Details: ");
+      $("#txStatus").text("Zombie Details: " + "ID: " + id);
       return cryptoZombies.methods.zombies(id).call()
     }
 
@@ -316,6 +352,20 @@ ul {
 
     function getZombiesByOwner(owner) {
       return cryptoZombies.methods.getZombiesByOwner(owner).call()
+    }
+
+    function attackZombie(zombieId, targetId) {
+      console.log("ZOMBIE ID: " + names[zombieId] + " TARGET ID: " + names[targetId]);
+      $("#txStatus").text("attacking " + names[targetId] + " !!");
+      return cryptoZombies.methods.attack(zombieId, targetId)
+        .send({ from: userAccount})
+        .on("receipt", function (receipt) {
+          $("#txStatus").text("Attack over");
+          getZombiesByOwner(userAccount).then(displayZombies);
+        })
+        .on("error", function (error) {
+          $("#txStatus").text("Failed Attack");
+        });
     }
 
     window.addEventListener('load', async () => {
@@ -368,8 +418,10 @@ ul {
        window.location.reload(); 
    });  
 
-    createzombieButton.addEventListener('click', () => {
-        createRandomZombie("Aberzombie");
+    createZombieButton.addEventListener('click', () => {
+        var inputName = document.getElementById("zombieName").value;
+        createRandomZombie(inputName);
+        document.getElementById("zombieName").value = "";
     });
 
     showZombieButton.addEventListener('click', () => {
@@ -379,7 +431,7 @@ ul {
 
     levelupButton.addEventListener('click', () => {
       getZombiesByOwner(userAccount)
-            .then(levelUp);
+            .then(levelUp(0));
     });
 
     feedOnKittyButton.addEventListener('click', () => {
@@ -388,6 +440,10 @@ ul {
 
     transferZombieButton.addEventListener('click', () => {
       getZombiesByOwner(userAccount).then(transferZombie);
+    });
+
+    attackZombieButton.addEventListener('click', () => {
+      getZombiesByOwner(userAccount).then(attackZombie(0,1));
     });
 
     
