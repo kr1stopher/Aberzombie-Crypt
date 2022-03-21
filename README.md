@@ -8,11 +8,12 @@ Group Members:
 
 Improvements made to the starter code:
 1. Customized background
-2. Stylized buttons. Changed color on hover.
-3. Text input field for desired zombie name
-4. Able to create more than 1 zombie
-5. Zombie details show who owns it according to Owner Account
-6. Attack functionality works, but sporadically. Currently set to have Zombie 1 battle Zombie 2 only.
+2. Stylized buttons. Changes color on hover.
+3. Added 3 buttons: Attack Zombie, Feed on Kitty, Transfer Zombie
+4. Text input field for desired zombie name
+5. Able to create more than 1 zombie
+6. Zombie details show who owns it according to Owner Account
+7. Attack functionality works, but sporadically. Currently set to have Zombie 1 battle Zombie 2 only.
 
 Notes:
 - Feed on Kitty, Transfer Zombie functionalities are work in progress. 
