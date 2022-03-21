@@ -110,6 +110,49 @@
   transform: translateY(1px);
 }
 
+.transferZombieButton {
+  display: inline-block;
+  padding: 15px 12px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 3px #999;
+}
+
+.transferZombieButton:hover {
+  padding: 17px 14px;
+  font-size: 20px;
+  border-radius: 15px;
+  background-color: #eb0b0b
+}
+
+.transferZombieButton:active {
+  background-color: #3e8e41;
+  box-shadow: 0 2px #666;
+  transform: translateY(1px);
+}
+
+ul li::before {
+  content: "\2022";
+  color: white;
+  font-weight: bold;
+  display: inline-block; 
+  width: 1em;
+  margin-left: -1em;
+  color: white;
+  background-color:none;
+}
+
+ul {
+  color: white;
+}
+
 
 
 
@@ -138,6 +181,7 @@
   <button class="createzombieButton">Create Zombie</button>
   <button class="levelupButton">Level Up</button>
   <button class="feedOnKittyButton">Feed on Kitty</button>
+  <button class="transferZombieButton">Transfer Zombie</button>
 
   <script>
 
@@ -147,11 +191,12 @@
     const createzombieButton = document.querySelector('.createzombieButton');
     const levelupButton = document.querySelector('.levelupButton');
     const feedOnKittyButton = document.querySelector('.feedOnKittyButton');
-
+    const transferZombieButton = document.querySelector('.transferZombieButton');
+      
     function startApp() {
 	
-      //ZombieOwnership contratc address
-      var cryptoZombiesAddress = "0x6105B3e5842dA8be79421BE2780B889F607aCE36";
+      //ZombieOwnership contract address
+      var cryptoZombiesAddress = "0x6A87aeCDF8FB5312B2d2E381EcB319a0e4D73c09";
 
       cryptoZombies = new web3.eth.Contract(cryptoZombiesABI, cryptoZombiesAddress);
 
@@ -180,8 +225,7 @@
 
         getZombieDetails(id)
           .then(function (zombie) {
-
-
+            
             $("#zombies").append(`<div class="zombie">
               <ul>
                 <li>Name: ${zombie.name}</li>
@@ -194,11 +238,9 @@
             </div>`);
           });
       }
-
     }
 
     function createRandomZombie(name) {
-
 
       $("#txStatus").text("Creating new zombie on the blockchain. This may take a while...");
 
@@ -211,7 +253,7 @@
         })
         .on("error", function (error) {
 
-          $("#txStatus").text(error);
+          $("#txStatus").text("Failed to create Random Zombie");
         });
     }
 
@@ -224,7 +266,7 @@
           getZombiesByOwner(userAccount).then(displayZombies);
         })
         .on("error", function (error) {
-          $("#txStatus").text(error);
+          $("#txStatus").text("No Kitties to feed on");
         });
     }
 
@@ -236,11 +278,27 @@
           $("#txStatus").text("Power overwhelming! Zombie successfully leveled up");
         })
         .on("error", function (error) {
-          $("#txStatus").text(error);
+          $("#txStatus").text("Power underwhelming. Failed to level up");
         });
     }
 
+    function transferZombie(receiver, id){
+      $("#txStatus").text("Transfering your zombie on the blockchain. This may take a while...");
+      return cryptoZombies.methods.transfer(receiver, id)
+          .send({ from: userAccount })
+          .on("receipt", function(receipt) {
+              $("#txStatus").text("Successfully transfered to " + receiver + "!");
+
+              getZombiesByOwner(receiver).then(displayZombies);
+          })
+          .on("error", function(error) {
+
+              $("#txStatus").text("Failed to transfer zombie.");
+          });
+    }
+
     function getZombieDetails(id) {
+      $("#txStatus").text("Zombie Details: ");
       return cryptoZombies.methods.zombies(id).call()
     }
 
@@ -302,10 +360,9 @@
        window.location.reload(); 
    });  
 
- 
     createzombieButton.addEventListener('click', () => {
-      createRandomZombie(userAccount);
-
+      createRandomZombie(userAccount)
+            .then(displayZombies);
     });
 
     showZombieButton.addEventListener('click', () => {
@@ -317,14 +374,18 @@
     levelupButton.addEventListener('click', () => {
       getZombiesByOwner(userAccount)
             .then(levelUp);
-
     });
 
     feedOnKittyButton.addEventListener('click', () => {
-      feedOnKitty(userAccount)
-            .then(levelUp);
-
+      getZombiesByOwner(userAccount).then(feedOnKitty);
     });
+
+    transferZombieButton.addEventListener('click', () => {
+      getZombiesByOwner(userAccount).then(transferZombie);
+    });
+
+    
+
 
 
 
